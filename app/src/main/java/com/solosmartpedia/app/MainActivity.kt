@@ -110,11 +110,7 @@ class MainActivity : AppCompatActivity() {
         val nfcManager = getSystemService(Context.NFC_SERVICE) as NfcManager
         nfcAdapter = nfcManager.defaultAdapter
 
-        if (nfcAdapter == null) {
-            // Device has no NFC — hide button silently
-            binding.btnNfc.visibility = View.GONE
-            return
-        }
+        if (nfcAdapter == null) return
 
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
             PendingIntent.FLAG_MUTABLE else 0
@@ -125,8 +121,6 @@ class MainActivity : AppCompatActivity() {
             flags
         )
 
-        binding.btnNfc.visibility = View.VISIBLE
-        binding.btnNfc.setOnClickListener { showNfcScanOverlay() }
     }
 
     private fun showNfcScanOverlay() {
@@ -199,14 +193,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupPrinter() {
         printerManager = BluetoothPrinterManager(this)
-        binding.btnPrinter.setOnClickListener { checkBtAndOpenSheet() }
-        updatePrinterFabState()
-    }
-
-    private fun updatePrinterFabState() {
-        val tint = if (printerManager.isConnected) R.color.success else R.color.primary
-        binding.btnPrinter.backgroundTintList =
-            android.content.res.ColorStateList.valueOf(ContextCompat.getColor(this, tint))
     }
 
     @SuppressLint("MissingPermission")
@@ -232,7 +218,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun openPrinterSheet() {
         PrinterBottomSheet(printerManager) { connected, name ->
-            updatePrinterFabState()
             val js = if (connected)
                 "javascript:if(typeof onPrinterConnected==='function'){onPrinterConnected('$name');}"
             else

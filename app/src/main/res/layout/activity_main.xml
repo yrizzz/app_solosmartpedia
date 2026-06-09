@@ -80,41 +80,6 @@
 
     </LinearLayout>
 
-    <!-- FAB stack bottom-right -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:orientation="vertical"
-        android:layout_margin="16dp"
-        android:gravity="end">
-
-        <!-- NFC FAB -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnNfc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:contentDescription="@string/nfc_scan"
-            android:src="@drawable/ic_nfc"
-            android:visibility="gone"
-            app:backgroundTint="@color/primary"
-            app:tint="@color/white"
-            app:fabSize="mini" />
-
-        <!-- Printer FAB -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnPrinter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/printer_title"
-            android:src="@drawable/ic_printer"
-            app:backgroundTint="@color/primary"
-            app:tint="@color/white"
-            app:fabSize="normal" />
-
-    </LinearLayout>
-
     <!-- NFC Scan Overlay -->
     <FrameLayout
         android:id="@+id/nfcOverlay"
