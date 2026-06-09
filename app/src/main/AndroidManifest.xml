@@ -10,8 +10,11 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.NFC" />
 
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <!-- NFC optional: app works on devices without NFC too -->
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -45,7 +48,24 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.SoloSmartPedia.NoActionBar"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTop">
+            <!-- Handle NFC intents while app is open -->
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

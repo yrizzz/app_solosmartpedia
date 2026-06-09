@@ -12,7 +12,14 @@
     <string name="offline_message">Periksa koneksi internet Anda dan coba lagi. Pastikan Wi-Fi atau data seluler aktif.</string>
     <string name="btn_retry">Coba Lagi</string>
     <string name="still_offline">Masih tidak ada koneksi internet</string>
+    <string name="btn_cancel">Batal</string>
 
     <string name="choose_file">Pilih File atau Ambil Foto</string>
     <string name="permission_denied">Izin kamera/penyimpanan ditolak</string>
+
+    <!-- NFC -->
+    <string name="nfc_scan">Tap Kartu</string>
+    <string name="nfc_instruction">Tempelkan kartu e-money, kartu debit/kredit, atau kartu NFC ke bagian belakang perangkat Anda</string>
+    <string name="nfc_disabled">NFC tidak aktif. Aktifkan NFC di Pengaturan.</string>
+    <string name="nfc_read_success">Kartu terdeteksi</string>
 </resources>

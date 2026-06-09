@@ -2,12 +2,17 @@ package com.solosmartpedia.app
 
 import android.Manifest
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
+import android.nfc.NfcAdapter
+import android.nfc.NfcManager
+import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -29,6 +34,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var fileUploadCallback: ValueCallback<Array<Uri>>? = null
     private var cameraImageUri: Uri? = null
+
+    // NFC
+    private var nfcAdapter: NfcAdapter? = null
+    private var pendingNfcIntent: PendingIntent? = null
 
     private val filePickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -55,10 +64,8 @@ class MainActivity : AppCompatActivity() {
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
-        val allGranted = permissions.values.all { it }
-        if (allGranted) {
-            openFileChooser()
-        } else {
+        if (permissions.values.all { it }) openFileChooser()
+        else {
             Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
             fileUploadCallback?.onReceiveValue(null)
             fileUploadCallback = null
@@ -70,15 +77,105 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupNfc()
         setupWebView()
         setupSwipeRefresh()
 
-        if (isNetworkAvailable()) {
-            loadWebsite()
-        } else {
-            showOfflinePage()
+        if (isNetworkAvailable()) loadWebsite() else showOfflinePage()
+    }
+
+    // ─── NFC Setup ───────────────────────────────────────────────────────────
+
+    private fun setupNfc() {
+        val nfcManager = getSystemService(Context.NFC_SERVICE) as NfcManager
+        nfcAdapter = nfcManager.defaultAdapter
+
+        if (nfcAdapter == null) {
+            // Device has no NFC — hide button silently
+            binding.btnNfc.visibility = View.GONE
+            return
+        }
+
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            PendingIntent.FLAG_MUTABLE else 0
+
+        pendingNfcIntent = PendingIntent.getActivity(
+            this, 0,
+            Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+            flags
+        )
+
+        binding.btnNfc.visibility = View.VISIBLE
+        binding.btnNfc.setOnClickListener { showNfcScanOverlay() }
+    }
+
+    private fun showNfcScanOverlay() {
+        if (nfcAdapter?.isEnabled == false) {
+            Toast.makeText(this, getString(R.string.nfc_disabled), Toast.LENGTH_LONG).show()
+            startActivity(Intent(android.provider.Settings.ACTION_NFC_SETTINGS))
+            return
+        }
+        binding.nfcOverlay.visibility = View.VISIBLE
+        binding.btnNfcClose.setOnClickListener { hideNfcOverlay() }
+    }
+
+    private fun hideNfcOverlay() {
+        binding.nfcOverlay.visibility = View.GONE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        nfcAdapter?.enableForegroundDispatch(
+            this, pendingNfcIntent,
+            arrayOf(
+                IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED),
+                IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED),
+                IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED)
+            ),
+            null
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        nfcAdapter?.disableForegroundDispatch(this)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (intent.action in listOf(
+                NfcAdapter.ACTION_TAG_DISCOVERED,
+                NfcAdapter.ACTION_NDEF_DISCOVERED,
+                NfcAdapter.ACTION_TECH_DISCOVERED
+            )
+        ) {
+            val tag: Tag? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
+            else
+                @Suppress("DEPRECATION")
+                intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+
+            tag?.let { handleNfcTag(it) }
         }
     }
+
+    private fun handleNfcTag(tag: Tag) {
+        hideNfcOverlay()
+        val uid = NfcHelper.getCardUid(tag)
+        val cardType = NfcHelper.getCardType(tag)
+
+        // Send to WebView JavaScript
+        val js = "javascript:if(typeof onNfcRead==='function'){onNfcRead('$uid','$cardType');}"
+        binding.webView.post { binding.webView.loadUrl(js) }
+
+        Toast.makeText(
+            this,
+            "${getString(R.string.nfc_read_success)}: $cardType\nUID: $uid",
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
+    // ─── WebView ─────────────────────────────────────────────────────────────
 
     private fun setupWebView() {
         binding.webView.apply {
@@ -97,10 +194,8 @@ class MainActivity : AppCompatActivity() {
                 builtInZoomControls = false
                 displayZoomControls = false
             }
-
             webViewClient = SoloWebViewClient()
             webChromeClient = SoloWebChromeClient()
-
             addJavascriptInterface(WebAppInterface(this@MainActivity), "AndroidBridge")
         }
     }
@@ -109,31 +204,22 @@ class MainActivity : AppCompatActivity() {
         binding.swipeRefresh.apply {
             setColorSchemeColors(
                 ContextCompat.getColor(this@MainActivity, R.color.primary),
-                ContextCompat.getColor(this@MainActivity, R.color.primary_dark),
-                ContextCompat.getColor(this@MainActivity, R.color.accent)
+                ContextCompat.getColor(this@MainActivity, R.color.primary_dark)
             )
             setOnRefreshListener {
-                if (isNetworkAvailable()) {
-                    hideOfflinePage()
-                    binding.webView.reload()
-                } else {
-                    isRefreshing = false
-                    showOfflinePage()
-                }
+                if (isNetworkAvailable()) { hideOfflinePage(); binding.webView.reload() }
+                else { isRefreshing = false; showOfflinePage() }
             }
         }
     }
 
-    private fun loadWebsite() {
-        binding.webView.loadUrl(BASE_URL)
-    }
+    private fun loadWebsite() { binding.webView.loadUrl(BASE_URL) }
 
     private fun isNetworkAvailable(): Boolean {
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val network = cm.activeNetwork ?: return false
-        val capabilities = cm.getNetworkCapabilities(network) ?: return false
-        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-               capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        val caps = cm.getNetworkCapabilities(cm.activeNetwork) ?: return false
+        return caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+               caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
     }
 
     private fun showOfflinePage() {
@@ -141,12 +227,8 @@ class MainActivity : AppCompatActivity() {
         binding.swipeRefresh.isEnabled = false
         binding.offlineLayout.visibility = View.VISIBLE
         binding.btnRetry.setOnClickListener {
-            if (isNetworkAvailable()) {
-                hideOfflinePage()
-                loadWebsite()
-            } else {
-                Toast.makeText(this, getString(R.string.still_offline), Toast.LENGTH_SHORT).show()
-            }
+            if (isNetworkAvailable()) { hideOfflinePage(); loadWebsite() }
+            else Toast.makeText(this, getString(R.string.still_offline), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -158,132 +240,95 @@ class MainActivity : AppCompatActivity() {
 
     private fun saveLoginSession(url: String) {
         val prefs = getSharedPreferences(SplashActivity.SESSION_PREFS, Context.MODE_PRIVATE)
-        val isOnAuthPage = url.contains("/auth") || url.contains("/login")
-        val isLoggedIn = !isOnAuthPage && url.startsWith(BASE_URL)
+        val isLoggedIn = !url.contains("/auth") && !url.contains("/login") && url.startsWith(BASE_URL)
         prefs.edit().putBoolean(SplashActivity.KEY_IS_LOGGED_IN, isLoggedIn).apply()
     }
 
+    // ─── File Upload / Camera ─────────────────────────────────────────────────
+
     private fun checkAndRequestPermissions() {
-        val permissions = mutableListOf<String>()
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-            != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(Manifest.permission.CAMERA)
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
-                != PackageManager.PERMISSION_GRANTED) {
-                permissions.add(Manifest.permission.READ_MEDIA_IMAGES)
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        val needed = buildList {
+            if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) add(Manifest.permission.CAMERA)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.READ_MEDIA_IMAGES)
+                    != PackageManager.PERMISSION_GRANTED) add(Manifest.permission.READ_MEDIA_IMAGES)
+            } else {
+                if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) add(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
         }
-
-        if (permissions.isEmpty()) {
-            openFileChooser()
-        } else {
-            permissionLauncher.launch(permissions.toTypedArray())
-        }
+        if (needed.isEmpty()) openFileChooser() else permissionLauncher.launch(needed.toTypedArray())
     }
 
     private fun openFileChooser() {
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
-            val photoFile = createImageFile()
-            cameraImageUri = FileProvider.getUriForFile(
-                this,
-                "${packageName}.fileprovider",
-                photoFile
-            )
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri)
+        val photoFile = createImageFile()
+        cameraImageUri = FileProvider.getUriForFile(this, "${packageName}.fileprovider", photoFile)
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+            putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri)
         }
-
         val galleryIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "*/*"
             putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "application/pdf", "text/*"))
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
-
-        val chooser = Intent.createChooser(galleryIntent, getString(R.string.choose_file)).apply {
-            putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
-        }
-        filePickerLauncher.launch(chooser)
+        filePickerLauncher.launch(
+            Intent.createChooser(galleryIntent, getString(R.string.choose_file)).apply {
+                putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
+            }
+        )
     }
 
     private fun createImageFile(): File {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile("IMG_${timeStamp}_", ".jpg", storageDir)
+        val stamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        return File.createTempFile("IMG_${stamp}_", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES))
     }
 
     override fun onBackPressed() {
         when {
+            binding.nfcOverlay.visibility == View.VISIBLE -> hideNfcOverlay()
             binding.webView.canGoBack() -> binding.webView.goBack()
             else -> super.onBackPressed()
         }
     }
 
-    inner class SoloWebViewClient : WebViewClient() {
+    // ─── WebViewClient / ChromeClient ─────────────────────────────────────────
 
+    inner class SoloWebViewClient : WebViewClient() {
         override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
-            super.onPageStarted(view, url, favicon)
             binding.progressBar.visibility = View.VISIBLE
         }
-
         override fun onPageFinished(view: WebView?, url: String?) {
-            super.onPageFinished(view, url)
             binding.progressBar.visibility = View.GONE
             binding.swipeRefresh.isRefreshing = false
             url?.let { saveLoginSession(it) }
         }
-
-        override fun onReceivedError(
-            view: WebView?,
-            request: WebResourceRequest?,
-            error: WebResourceError?
-        ) {
-            super.onReceivedError(view, request, error)
+        override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
             if (request?.isForMainFrame == true) {
                 binding.progressBar.visibility = View.GONE
                 binding.swipeRefresh.isRefreshing = false
-                if (!isNetworkAvailable()) {
-                    showOfflinePage()
-                }
+                if (!isNetworkAvailable()) showOfflinePage()
             }
         }
-
-        override fun shouldOverrideUrlLoading(
-            view: WebView?,
-            request: WebResourceRequest?
-        ): Boolean {
+        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
             val url = request?.url?.toString() ?: return false
-            return if (url.startsWith("https://solosmartpedia.com") ||
-                       url.startsWith("http://solosmartpedia.com")) {
-                false
-            } else if (url.startsWith("mailto:") || url.startsWith("tel:")) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                startActivity(intent)
-                true
-            } else {
-                false
+            return when {
+                url.startsWith("https://solosmartpedia.com") || url.startsWith("http://solosmartpedia.com") -> false
+                url.startsWith("mailto:") || url.startsWith("tel:") -> {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))); true
+                }
+                else -> false
             }
         }
     }
 
     inner class SoloWebChromeClient : WebChromeClient() {
-
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
-            super.onProgressChanged(view, newProgress)
             binding.progressBar.progress = newProgress
             binding.progressBar.visibility = if (newProgress < 100) View.VISIBLE else View.GONE
         }
-
         override fun onShowFileChooser(
-            webView: WebView?,
-            filePathCallback: ValueCallback<Array<Uri>>?,
+            webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>?,
             fileChooserParams: FileChooserParams?
         ): Boolean {
             fileUploadCallback?.onReceiveValue(null)
@@ -291,22 +336,20 @@ class MainActivity : AppCompatActivity() {
             checkAndRequestPermissions()
             return true
         }
-
-        override fun onReceivedTitle(view: WebView?, title: String?) {
-            super.onReceivedTitle(view, title)
-        }
     }
 
-    inner class WebAppInterface(private val context: Context) {
-        @JavascriptInterface
-        fun showToast(message: String) {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-        }
+    inner class WebAppInterface(private val ctx: Context) {
+        @JavascriptInterface fun showToast(msg: String) =
+            Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show()
 
-        @JavascriptInterface
-        fun closeApp() {
-            (context as? Activity)?.finish()
-        }
+        @JavascriptInterface fun closeApp() = (ctx as? Activity)?.finish()
+
+        @JavascriptInterface fun isNfcAvailable(): Boolean = nfcAdapter != null
+
+        @JavascriptInterface fun isNfcEnabled(): Boolean = nfcAdapter?.isEnabled == true
+
+        @JavascriptInterface fun openNfcScan() =
+            runOnUiThread { showNfcScanOverlay() }
     }
 
     companion object {
