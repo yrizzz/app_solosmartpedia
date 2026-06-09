@@ -19,7 +19,17 @@
 
     <!-- NFC -->
     <string name="nfc_scan">Tap Kartu</string>
-    <string name="nfc_instruction">Tempelkan kartu e-money, kartu debit/kredit, atau kartu NFC ke bagian belakang perangkat Anda</string>
+    <string name="nfc_instruction">Tempelkan kartu e-money atau kartu NFC ke bagian belakang perangkat Anda</string>
     <string name="nfc_disabled">NFC tidak aktif. Aktifkan NFC di Pengaturan.</string>
     <string name="nfc_read_success">Kartu terdeteksi</string>
+
+    <!-- Bluetooth Printer -->
+    <string name="printer_title">Printer Thermal</string>
+    <string name="printer_paired_devices">Perangkat Berpasangan</string>
+    <string name="printer_no_devices">Belum ada printer yang dipasangkan.\nPasangkan printer via Pengaturan Bluetooth HP Anda.</string>
+    <string name="printer_test">Test Print</string>
+    <string name="printer_disconnect">Putus</string>
+    <string name="printer_not_connected">Printer belum terhubung</string>
+    <string name="bt_not_available">Perangkat ini tidak mendukung Bluetooth</string>
+    <string name="bt_permission_denied">Izin Bluetooth ditolak</string>
 </resources>

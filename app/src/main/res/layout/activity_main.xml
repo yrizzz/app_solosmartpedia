@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <!-- Progress bar (top) -->
     <ProgressBar
         android:id="@+id/progressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -18,18 +17,15 @@
         android:indeterminate="false"
         android:visibility="gone" />
 
-    <!-- WebView with pull-to-refresh -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="3dp">
-
         <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!-- Offline page -->
@@ -44,7 +40,6 @@
         android:visibility="gone">
 
         <ImageView
-            android:id="@+id/ivOffline"
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:src="@drawable/ic_offline"
@@ -85,22 +80,42 @@
 
     </LinearLayout>
 
-    <!-- FAB: NFC Scan button (bottom-right, hidden if no NFC) -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnNfc"
+    <!-- FAB stack bottom-right -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="20dp"
-        android:contentDescription="@string/nfc_scan"
-        android:src="@drawable/ic_nfc"
-        android:visibility="gone"
-        app:backgroundTint="@color/primary"
-        app:tint="@color/white"
-        app:fabSize="normal"
-        app:elevation="6dp" />
+        android:orientation="vertical"
+        android:layout_margin="16dp"
+        android:gravity="end">
 
-    <!-- NFC Scan Overlay (full screen) -->
+        <!-- NFC FAB -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnNfc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:contentDescription="@string/nfc_scan"
+            android:src="@drawable/ic_nfc"
+            android:visibility="gone"
+            app:backgroundTint="@color/primary"
+            app:tint="@color/white"
+            app:fabSize="mini" />
+
+        <!-- Printer FAB -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnPrinter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/printer_title"
+            android:src="@drawable/ic_printer"
+            app:backgroundTint="@color/primary"
+            app:tint="@color/white"
+            app:fabSize="normal" />
+
+    </LinearLayout>
+
+    <!-- NFC Scan Overlay -->
     <FrameLayout
         android:id="@+id/nfcOverlay"
         android:layout_width="match_parent"

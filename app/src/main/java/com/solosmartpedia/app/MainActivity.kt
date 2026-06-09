@@ -1,8 +1,10 @@
 package com.solosmartpedia.app
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.PendingIntent
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -17,6 +19,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
 import android.view.View
 import android.webkit.*
 import android.widget.Toast
@@ -38,6 +41,22 @@ class MainActivity : AppCompatActivity() {
     // NFC
     private var nfcAdapter: NfcAdapter? = null
     private var pendingNfcIntent: PendingIntent? = null
+
+    // Bluetooth Printer
+    private lateinit var printerManager: BluetoothPrinterManager
+
+    private val btEnableLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == Activity.RESULT_OK) openPrinterSheet()
+    }
+
+    private val btPermLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { perms ->
+        if (perms.values.all { it }) openPrinterSheet()
+        else Toast.makeText(this, getString(R.string.bt_permission_denied), Toast.LENGTH_SHORT).show()
+    }
 
     private val filePickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -78,6 +97,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupNfc()
+        setupPrinter()
         setupWebView()
         setupSwipeRefresh()
 
@@ -173,6 +193,52 @@ class MainActivity : AppCompatActivity() {
             "${getString(R.string.nfc_read_success)}: $cardType\nUID: $uid",
             Toast.LENGTH_LONG
         ).show()
+    }
+
+    // ─── Bluetooth Printer ────────────────────────────────────────────────────
+
+    private fun setupPrinter() {
+        printerManager = BluetoothPrinterManager(this)
+        binding.btnPrinter.setOnClickListener { checkBtAndOpenSheet() }
+        updatePrinterFabState()
+    }
+
+    private fun updatePrinterFabState() {
+        val tint = if (printerManager.isConnected) R.color.success else R.color.primary
+        binding.btnPrinter.backgroundTintList =
+            android.content.res.ColorStateList.valueOf(ContextCompat.getColor(this, tint))
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun checkBtAndOpenSheet() {
+        if (!printerManager.isBluetoothAvailable()) {
+            Toast.makeText(this, getString(R.string.bt_not_available), Toast.LENGTH_SHORT).show()
+            return
+        }
+        // Request permissions on Android 12+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val needed = listOf(
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH_SCAN
+            ).filter { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }
+            if (needed.isNotEmpty()) { btPermLauncher.launch(needed.toTypedArray()); return }
+        }
+        if (!printerManager.isBluetoothEnabled()) {
+            btEnableLauncher.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+            return
+        }
+        openPrinterSheet()
+    }
+
+    private fun openPrinterSheet() {
+        PrinterBottomSheet(printerManager) { connected, name ->
+            updatePrinterFabState()
+            val js = if (connected)
+                "javascript:if(typeof onPrinterConnected==='function'){onPrinterConnected('$name');}"
+            else
+                "javascript:if(typeof onPrinterDisconnected==='function'){onPrinterDisconnected();}"
+            binding.webView.post { binding.webView.loadUrl(js) }
+        }.show(supportFragmentManager, "printer")
     }
 
     // ─── WebView ─────────────────────────────────────────────────────────────
@@ -345,11 +411,60 @@ class MainActivity : AppCompatActivity() {
         @JavascriptInterface fun closeApp() = (ctx as? Activity)?.finish()
 
         @JavascriptInterface fun isNfcAvailable(): Boolean = nfcAdapter != null
-
         @JavascriptInterface fun isNfcEnabled(): Boolean = nfcAdapter?.isEnabled == true
+        @JavascriptInterface fun openNfcScan() = runOnUiThread { showNfcScanOverlay() }
 
-        @JavascriptInterface fun openNfcScan() =
-            runOnUiThread { showNfcScanOverlay() }
+        // ── Printer bridge ────────────────────────────────────────
+        @JavascriptInterface fun isPrinterAvailable(): Boolean =
+            printerManager.isBluetoothAvailable()
+
+        @JavascriptInterface fun isPrinterConnected(): Boolean =
+            printerManager.isConnected
+
+        @JavascriptInterface fun getPrinterName(): String =
+            printerManager.connectedDeviceName
+
+        @JavascriptInterface fun openPrinterSettings() =
+            runOnUiThread { checkBtAndOpenSheet() }
+
+        /** Print receipt from JSON string */
+        @JavascriptInterface fun printReceipt(json: String) {
+            if (!printerManager.isConnected) {
+                runOnUiThread {
+                    Toast.makeText(ctx, ctx.getString(R.string.printer_not_connected), Toast.LENGTH_SHORT).show()
+                    checkBtAndOpenSheet()
+                }
+                return
+            }
+            printerManager.printJson(json,
+                onSuccess = {
+                    runOnUiThread {
+                        val js = "javascript:if(typeof onPrintSuccess==='function'){onPrintSuccess();}"
+                        binding.webView.loadUrl(js)
+                    }
+                },
+                onError = { err ->
+                    runOnUiThread {
+                        Toast.makeText(ctx, "Print gagal: $err", Toast.LENGTH_SHORT).show()
+                        val js = "javascript:if(typeof onPrintError==='function'){onPrintError('${err.replace("'","\\'")}');}"
+                        binding.webView.loadUrl(js)
+                    }
+                }
+            )
+        }
+
+        /** Print plain text */
+        @JavascriptInterface fun printText(text: String) {
+            if (!printerManager.isConnected) {
+                runOnUiThread { checkBtAndOpenSheet() }
+                return
+            }
+            printerManager.print(
+                EscPosHelper.buildPlain(text),
+                onSuccess = {},
+                onError   = { err -> runOnUiThread { Toast.makeText(ctx, err, Toast.LENGTH_SHORT).show() } }
+            )
+        }
     }
 
     companion object {
