@@ -1,0 +1,208 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.solosmartpedia.app.debug"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+8-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="35" />
+9-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:4:5-67
+11-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:4:22-64
+12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+12-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:5:5-79
+12-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:5:22-76
+13    <uses-permission android:name="android.permission.CAMERA" />
+13-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:6:5-65
+13-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:6:22-62
+14    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+14-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:7:5-80
+14-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:7:22-77
+15    <uses-permission
+15-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:8:5-9:38
+16        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+16-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:8:22-78
+17        android:maxSdkVersion="28" />
+17-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:9:9-35
+18    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+18-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:10:5-76
+18-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:10:22-73
+19    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+19-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:11:5-75
+19-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:11:22-72
+20    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+20-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:12:5-75
+20-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:12:22-72
+21
+22    <uses-feature
+22-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:14:5-85
+23        android:name="android.hardware.camera"
+23-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:14:19-57
+24        android:required="false" />
+24-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:14:58-82
+25
+26    <permission
+26-->[androidx.core:core:1.12.0] /home/yrizzz/.gradle/caches/transforms-3/895320759ec7d4106665e689738c42a7/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+27        android:name="com.solosmartpedia.app.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+27-->[androidx.core:core:1.12.0] /home/yrizzz/.gradle/caches/transforms-3/895320759ec7d4106665e689738c42a7/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+28        android:protectionLevel="signature" />
+28-->[androidx.core:core:1.12.0] /home/yrizzz/.gradle/caches/transforms-3/895320759ec7d4106665e689738c42a7/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+29
+30    <uses-permission android:name="com.solosmartpedia.app.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+30-->[androidx.core:core:1.12.0] /home/yrizzz/.gradle/caches/transforms-3/895320759ec7d4106665e689738c42a7/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+30-->[androidx.core:core:1.12.0] /home/yrizzz/.gradle/caches/transforms-3/895320759ec7d4106665e689738c42a7/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+31
+32    <application
+32-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:16:5-60:19
+33        android:allowBackup="true"
+33-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:17:9-35
+34        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+34-->[androidx.core:core:1.12.0] /home/yrizzz/.gradle/caches/transforms-3/895320759ec7d4106665e689738c42a7/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+35        android:debuggable="true"
+36        android:extractNativeLibs="false"
+37        android:icon="@mipmap/ic_launcher"
+37-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:18:9-43
+38        android:label="@string/app_name"
+38-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:19:9-41
+39        android:networkSecurityConfig="@xml/network_security_config"
+39-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:24:9-69
+40        android:roundIcon="@mipmap/ic_launcher_round"
+40-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:20:9-54
+41        android:supportsRtl="false"
+41-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:21:9-36
+42        android:theme="@style/Theme.SoloSmartPedia"
+42-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:22:9-52
+43        android:usesCleartextTraffic="false" >
+43-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:23:9-45
+44        <activity
+44-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:26:9-35:20
+45            android:name="com.solosmartpedia.app.SplashActivity"
+45-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:27:13-43
+46            android:exported="true"
+46-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:28:13-36
+47            android:screenOrientation="portrait"
+47-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:30:13-49
+48            android:theme="@style/Theme.SoloSmartPedia.Splash" >
+48-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:29:13-63
+49            <intent-filter>
+49-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:31:13-34:29
+50                <action android:name="android.intent.action.MAIN" />
+50-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:32:17-69
+50-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:32:25-66
+51
+52                <category android:name="android.intent.category.LAUNCHER" />
+52-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:33:17-77
+52-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:33:27-74
+53            </intent-filter>
+54        </activity>
+55        <activity
+55-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:37:9-41:71
+56            android:name="com.solosmartpedia.app.WelcomeActivity"
+56-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:38:13-44
+57            android:exported="false"
+57-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:39:13-37
+58            android:screenOrientation="portrait"
+58-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:40:13-49
+59            android:theme="@style/Theme.SoloSmartPedia.NoActionBar" />
+59-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:41:13-68
+60        <activity
+60-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:43:9-48:77
+61            android:name="com.solosmartpedia.app.MainActivity"
+61-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:44:13-41
+62            android:configChanges="orientation|screenSize|keyboardHidden"
+62-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:48:13-74
+63            android:exported="false"
+63-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:45:13-37
+64            android:screenOrientation="portrait"
+64-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:46:13-49
+65            android:theme="@style/Theme.SoloSmartPedia.NoActionBar" />
+65-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:47:13-68
+66
+67        <provider
+68            android:name="androidx.core.content.FileProvider"
+68-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:51:13-62
+69            android:authorities="com.solosmartpedia.app.debug.fileprovider"
+69-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:52:13-64
+70            android:exported="false"
+70-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:53:13-37
+71            android:grantUriPermissions="true" >
+71-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:54:13-47
+72            <meta-data
+72-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:55:13-57:54
+73                android:name="android.support.FILE_PROVIDER_PATHS"
+73-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:56:17-67
+74                android:resource="@xml/file_paths" />
+74-->/home/yrizzz/Desktop/app_solosmartpedia/app/src/main/AndroidManifest.xml:57:17-51
+75        </provider>
+76        <provider
+76-->[androidx.emoji2:emoji2:1.2.0] /home/yrizzz/.gradle/caches/transforms-3/c5f95afab578f39ca6905223c17a5a11/transformed/emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+77            android:name="androidx.startup.InitializationProvider"
+77-->[androidx.emoji2:emoji2:1.2.0] /home/yrizzz/.gradle/caches/transforms-3/c5f95afab578f39ca6905223c17a5a11/transformed/emoji2-1.2.0/AndroidManifest.xml:25:13-67
+78            android:authorities="com.solosmartpedia.app.debug.androidx-startup"
+78-->[androidx.emoji2:emoji2:1.2.0] /home/yrizzz/.gradle/caches/transforms-3/c5f95afab578f39ca6905223c17a5a11/transformed/emoji2-1.2.0/AndroidManifest.xml:26:13-68
+79            android:exported="false" >
+79-->[androidx.emoji2:emoji2:1.2.0] /home/yrizzz/.gradle/caches/transforms-3/c5f95afab578f39ca6905223c17a5a11/transformed/emoji2-1.2.0/AndroidManifest.xml:27:13-37
+80            <meta-data
+80-->[androidx.emoji2:emoji2:1.2.0] /home/yrizzz/.gradle/caches/transforms-3/c5f95afab578f39ca6905223c17a5a11/transformed/emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+81                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+81-->[androidx.emoji2:emoji2:1.2.0] /home/yrizzz/.gradle/caches/transforms-3/c5f95afab578f39ca6905223c17a5a11/transformed/emoji2-1.2.0/AndroidManifest.xml:30:17-75
+82                android:value="androidx.startup" />
+82-->[androidx.emoji2:emoji2:1.2.0] /home/yrizzz/.gradle/caches/transforms-3/c5f95afab578f39ca6905223c17a5a11/transformed/emoji2-1.2.0/AndroidManifest.xml:31:17-49
+83            <meta-data
+83-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/yrizzz/.gradle/caches/transforms-3/e1e6fbcbbcfa9626c1b4a9d8b53b6990/transformed/lifecycle-process-2.6.1/AndroidManifest.xml:29:13-31:52
+84                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+84-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/yrizzz/.gradle/caches/transforms-3/e1e6fbcbbcfa9626c1b4a9d8b53b6990/transformed/lifecycle-process-2.6.1/AndroidManifest.xml:30:17-78
+85                android:value="androidx.startup" />
+85-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/yrizzz/.gradle/caches/transforms-3/e1e6fbcbbcfa9626c1b4a9d8b53b6990/transformed/lifecycle-process-2.6.1/AndroidManifest.xml:31:17-49
+86            <meta-data
+86-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+87                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+87-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+88                android:value="androidx.startup" />
+88-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+89        </provider>
+90
+91        <receiver
+91-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+92            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+92-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+93            android:directBootAware="false"
+93-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+94            android:enabled="true"
+94-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+95            android:exported="true"
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+96            android:permission="android.permission.DUMP" >
+96-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+97            <intent-filter>
+97-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+98                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+99            </intent-filter>
+100            <intent-filter>
+100-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+101                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+101-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+101-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+102            </intent-filter>
+103            <intent-filter>
+103-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+104                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+104-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+104-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+105            </intent-filter>
+106            <intent-filter>
+106-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+107                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+107-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+107-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/yrizzz/.gradle/caches/transforms-3/a9972fbf6fb9a9aee5f6a3a925342915/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+108            </intent-filter>
+109        </receiver>
+110    </application>
+111
+112</manifest>

@@ -1,0 +1,86 @@
+[
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/xml_network_security_config.xml.flat",
+        "source": "com.solosmartpedia.app-main-36:/xml/network_security_config.xml"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/layout_activity_splash.xml.flat",
+        "source": "com.solosmartpedia.app-main-36:/layout/activity_splash.xml"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/layout_activity_main.xml.flat",
+        "source": "com.solosmartpedia.app-main-36:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "com.solosmartpedia.app-main-36:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/layout_activity_welcome.xml.flat",
+        "source": "com.solosmartpedia.app-main-36:/layout/activity_welcome.xml"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/drawable_bg_splash_gradient.xml.flat",
+        "source": "com.solosmartpedia.app-main-36:/drawable/bg_splash_gradient.xml"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/drawable-night_bg_welcome_gradient.xml.flat",
+        "source": "com.solosmartpedia.app-main-36:/drawable-night/bg_welcome_gradient.xml"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.solosmartpedia.app-main-36:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.solosmartpedia.app-main-36:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/drawable_ic_logo.png.flat",
+        "source": "com.solosmartpedia.app-main-36:/drawable/ic_logo.png"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/drawable_ic_offline.xml.flat",
+        "source": "com.solosmartpedia.app-main-36:/drawable/ic_offline.xml"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.solosmartpedia.app-main-36:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/xml_file_paths.xml.flat",
+        "source": "com.solosmartpedia.app-main-36:/xml/file_paths.xml"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.solosmartpedia.app-main-36:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "com.solosmartpedia.app-main-36:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.solosmartpedia.app-main-36:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/drawable_bg_welcome_gradient.xml.flat",
+        "source": "com.solosmartpedia.app-main-36:/drawable/bg_welcome_gradient.xml"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "com.solosmartpedia.app-main-36:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.solosmartpedia.app-main-36:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "com.solosmartpedia.app-main-36:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.solosmartpedia.app-merged_res-34:/drawable-night_bg_splash_gradient.xml.flat",
+        "source": "com.solosmartpedia.app-main-36:/drawable-night/bg_splash_gradient.xml"
+    }
+]
