@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- LIGHT MODE colors -->
+<resources>
+    <color name="primary">#2563EB</color>
+    <color name="primary_dark">#1D4ED8</color>
+    <color name="primary_light">#3B82F6</color>
+    <color name="accent">#2563EB</color>
+
+    <!-- Light background (system light) -->
+    <color name="background">#F0F6FF</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Text -->
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#475569</color>
+    <color name="text_hint">#94A3B8</color>
+
+    <!-- Status/Nav bar -->
+    <color name="status_bar_color">#EBF3FF</color>
+
+    <!-- Gradient anchors (light) -->
+    <color name="gradient_start">#EBF3FF</color>
+    <color name="gradient_end">#DBEAFE</color>
+
+    <!-- Misc -->
+    <color name="white">#FFFFFF</color>
+    <color name="success">#10B981</color>
+    <color name="error">#EF4444</color>
+    <color name="warning">#F59E0B</color>
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DARK MODE colors -->
+<resources>
+    <color name="primary">#3B82F6</color>
+    <color name="primary_dark">#2563EB</color>
+    <color name="primary_light">#60A5FA</color>
+    <color name="accent">#3B82F6</color>
+
+    <!-- Dark navy background (matches solosmartpedia dark theme) -->
+    <color name="background">#050D1F</color>
+    <color name="surface">#0F1E35</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Text -->
+    <color name="text_primary">#F1F5F9</color>
+    <color name="text_secondary">#94A3B8</color>
+    <color name="text_hint">#475569</color>
+
+    <!-- Status/Nav bar -->
+    <color name="status_bar_color">#050D1F</color>
+
+    <!-- Gradient anchors (dark navy) -->
+    <color name="gradient_start">#050D1F</color>
+    <color name="gradient_end">#0F1E35</color>
+
+    <!-- Misc -->
+    <color name="white">#FFFFFF</color>
+    <color name="success">#10B981</color>
+    <color name="error">#EF4444</color>
+    <color name="warning">#F59E0B</color>
+</resources>
