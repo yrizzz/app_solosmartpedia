@@ -262,6 +262,11 @@ class MainActivity : AppCompatActivity() {
                 else { isRefreshing = false; showOfflinePage() }
             }
         }
+
+        // Hanya aktifkan pull-to-refresh saat WebView benar-benar di posisi paling atas
+        binding.webView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            binding.swipeRefresh.isEnabled = scrollY == 0
+        }
     }
 
     private fun loadWebsite() { binding.webView.loadUrl(BASE_URL) }
