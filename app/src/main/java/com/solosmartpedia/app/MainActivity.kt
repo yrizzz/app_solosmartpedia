@@ -263,9 +263,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Hanya aktifkan pull-to-refresh saat WebView benar-benar di posisi paling atas
-        binding.webView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-            binding.swipeRefresh.isEnabled = scrollY == 0
+        // Hanya aktifkan pull-to-refresh saat konten WebView benar-benar di posisi paling atas
+        binding.swipeRefresh.setOnChildScrollUpCallback { _, _ ->
+            binding.webView.canScrollVertically(-1)
         }
     }
 
