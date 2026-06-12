@@ -179,8 +179,8 @@ class MainActivity : AppCompatActivity() {
         val cardType = NfcHelper.getCardType(tag)
 
         // Send to WebView JavaScript
-        val js = "javascript:if(typeof onNfcRead==='function'){onNfcRead('$uid','$cardType');}"
-        binding.webView.post { binding.webView.loadUrl(js) }
+        val js = "if(typeof onNfcRead==='function'){onNfcRead('$uid','$cardType');}"
+        evaluateJavaScriptInWebView(js)
 
         Toast.makeText(
             this,
@@ -219,10 +219,10 @@ class MainActivity : AppCompatActivity() {
     private fun openPrinterSheet() {
         PrinterBottomSheet(printerManager) { connected, name ->
             val js = if (connected)
-                "javascript:if(typeof onPrinterConnected==='function'){onPrinterConnected('$name');}"
+                "if(typeof onPrinterConnected==='function'){onPrinterConnected('$name');}"
             else
-                "javascript:if(typeof onPrinterDisconnected==='function'){onPrinterDisconnected();}"
-            binding.webView.post { binding.webView.loadUrl(js) }
+                "if(typeof onPrinterDisconnected==='function'){onPrinterDisconnected();}"
+            evaluateJavaScriptInWebView(js)
         }.show(supportFragmentManager, "printer")
     }
 
@@ -340,6 +340,16 @@ class MainActivity : AppCompatActivity() {
         return File.createTempFile("IMG_${stamp}_", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES))
     }
 
+    fun evaluateJavaScriptInWebView(js: String) {
+        binding.webView.post {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                binding.webView.evaluateJavascript(js, null)
+            } else {
+                binding.webView.loadUrl("javascript:$js")
+            }
+        }
+    }
+
     override fun onBackPressed() {
         when {
             binding.nfcOverlay.visibility == View.VISIBLE -> hideNfcOverlay()
@@ -429,15 +439,15 @@ class MainActivity : AppCompatActivity() {
             printerManager.printJson(json,
                 onSuccess = {
                     runOnUiThread {
-                        val js = "javascript:if(typeof onPrintSuccess==='function'){onPrintSuccess();}"
-                        binding.webView.loadUrl(js)
+                        val js = "if(typeof onPrintSuccess==='function'){onPrintSuccess();}"
+                        evaluateJavaScriptInWebView(js)
                     }
                 },
                 onError = { err ->
                     runOnUiThread {
                         Toast.makeText(ctx, "Print gagal: $err", Toast.LENGTH_SHORT).show()
-                        val js = "javascript:if(typeof onPrintError==='function'){onPrintError('${err.replace("'","\\'")}');}"
-                        binding.webView.loadUrl(js)
+                        val js = "if(typeof onPrintError==='function'){onPrintError('${err.replace("'","\\'")}');}"
+                        evaluateJavaScriptInWebView(js)
                     }
                 }
             )

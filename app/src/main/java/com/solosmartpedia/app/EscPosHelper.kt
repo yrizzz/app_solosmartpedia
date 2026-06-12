@@ -75,7 +75,7 @@ object EscPosHelper {
 
         if (title.isNotEmpty() || subtitle.isNotEmpty()) {
             buf += ALIGN_LEFT
-            buf += text(divider('─'))
+            buf += text(divider('-'))
         }
 
         // Items
@@ -97,11 +97,11 @@ object EscPosHelper {
         val total = obj.optString("total", "")
         if (total.isNotEmpty()) {
             buf += ALIGN_LEFT
-            buf += text(divider('─'))
+            buf += text(divider('-'))
             buf += BOLD_ON
             buf += text(rowLabelValue("TOTAL", total))
             buf += BOLD_OFF
-            buf += text(divider('═'))
+            buf += text(divider('='))
         }
 
         // Footer
@@ -136,10 +136,10 @@ object EscPosHelper {
         buf += text("** TES PRINTER **")
         buf += FEED_LINE
         buf += ALIGN_LEFT
-        buf += text(divider('─'))
+        buf += text(divider('-'))
         buf += text(rowLabelValue("Koneksi", "OK"))
         buf += text(rowLabelValue("Status", "Siap"))
-        buf += text(divider('─'))
+        buf += text(divider('-'))
         buf += FEED_LINE
         buf += ALIGN_CENTER
         buf += text("Printer siap digunakan!")
